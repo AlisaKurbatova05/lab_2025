@@ -8,5 +8,7 @@ docker run -it --rm \
     --env LIBGL_ALWAYS_SOFTWARE=1 \
     --volume /tmp/.X11-unix:/tmp/.X11-unix \
     --device /dev/dri:/dev/dri \
-    --privileged \
+    --runtime=nvidia \
+    --gpus all \
+    --rm \
     lab_2

@@ -1,10 +1,8 @@
 FROM osrf/ros:humble-desktop-full
 
-# nvidia-container-runtime
-ENV NVIDIA_VISIBLE_DEVICES \
-    ${NVIDIA_VISIBLE_DEVICES:-all}
-ENV NVIDIA_DRIVER_CAPABILITIES \
-   ${NVIDIA_DRIVER_CAPABILITIES:+$NVIDIA_DRIVER_CAPABILITIES,}graphics
+# # NVIDIA environment variables for GPU support
+# ENV NVIDIA_VISIBLE_DEVICES ${NVIDIA_VISIBLE_DEVICES:-all}
+# ENV NVIDIA_DRIVER_CAPABILITIES ${NVIDIA_DRIVER_CAPABILITIES:+$NVIDIA_DRIVER_CAPABILITIES,}graphics,compute,utility
 
 # install ros package
 RUN apt-get update && \
@@ -18,7 +16,7 @@ RUN apt-get update && \
       ros-humble-joint-state-publisher-gui && \
     rm -rf /var/lib/apt/lists/*
 
-# Install python3-pip and Python libraries
+# Install python3-pip and Python librariesW
 RUN apt-get update && \
     apt-get install -y python3-pip && \
     pip3 install cv_bridge pyzmq zmq ultralytics && \
