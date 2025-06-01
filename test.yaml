@@ -9,8 +9,8 @@ Panels:
         - /TF1
       Splitter Ratio: 0.5
     Tree Height: 611
-  # - Class: rviz_common/ToolProperties
-  #   Name: Tool Properties
+  - Class: rviz_common/ToolProperties
+    Name: Tool Properties
 Visualization Manager:
   Class: ""
   Displays:
@@ -20,7 +20,7 @@ Visualization Manager:
       Color: 160; 160; 164
       Enabled: true
       Line Style:
-        Line Width: 0.029999999329447746
+        Line Width: 0.03
         Value: Lines
       Name: Grid
       Normal Cell Count: 0
@@ -32,43 +32,18 @@ Visualization Manager:
       Plane Cell Count: 10
       Reference Frame: <Fixed Frame>
       Value: true
-    - Alpha: 1
+    - Alpha: 1.0
       Class: rviz_default_plugins/Map
-      Color Scheme: costmap
+      Color Scheme: map
       Enabled: true
       Name: Map
       Topic: /map
       Value: true
-    - Alpha: 1
-      Class: rviz_default_plugins/Map
-      Color Scheme: costmap
-      Enabled: false
-      Name: Global costmap
-      Topic: /global_costmap/costmap
+    - Class: rviz_default_plugins/PoseArray
+      Enabled: true
+      Name: Particle Cloud
+      Topic: /particle_cloud
       Value: true
-    - Alpha: 1
-      Class: rviz_default_plugins/Map
-      Color Scheme: costmap
-      Enabled: false
-      Name: Local costmap
-      Topic: /local_costmap/costmap
-      Value: true
-    - Alpha: 1
-      Class: rviz_default_plugins/Marker
-      Enabled: false
-      Name: Voxel layer
-      Topic: /my_marker
-      Value: true
-    - Class: rviz_default_plugins/Image
-      Name: Video with predict
-      Enabled: True
-      Topic: /video_with_predict
-      Value: True
-    # - Class: rviz_default_plugins/PoseArray
-    #   Enabled: true
-    #   Name: Particle Cloud
-    #   Topic: /particle_cloud
-    #   Value: true
     - Class: rviz_default_plugins/Path
       Enabled: true
       Name: Plan
@@ -76,14 +51,14 @@ Visualization Manager:
       Color: 0; 255; 0
       Line Width: 0.03
       Value: true
-    # - Class: rviz_default_plugins/LaserScan
-    #   Enabled: true
-    #   Name: LaserScan
-    #   Topic: /scan
-    #   Size (m): 0.05
-    #   Color: 255; 0; 0
-    #   Value: true
-    - Alpha: 0.6000000238418579
+    - Class: rviz_default_plugins/LaserScan
+      Enabled: true
+      Name: LaserScan
+      Topic: /scan
+      Size (m): 0.05
+      Color: 255; 0; 0
+      Value: true
+    - Alpha: 0.6
       Class: rviz_default_plugins/RobotModel
       Collision Enabled: false
       Description File: ""
@@ -109,32 +84,26 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         drivewhl_l_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         drivewhl_r_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         front_caster:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         imu_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         lidar_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
       Name: RobotModel
       TF Prefix: ""
       Update Interval: 0
@@ -161,32 +130,19 @@ Visualization Manager:
           Value: true
         odom:
           Value: true
-      Marker Scale: 0.30000001192092896
+        map:
+          Value: true
+      Marker Scale: 0.3
       Name: TF
       Show Arrows: true
       Show Axes: true
       Show Names: true
-      Tree:
-        odom:
-          base_link:
-            base_footprint:
-              {}
-            drivewhl_l_link:
-              {}
-            drivewhl_r_link:
-              {}
-            front_caster:
-              {}
-            imu_link:
-              {}
-            lidar_link:
-              {}
       Update Interval: 0
       Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
-    Fixed Frame: map
+    Fixed Frame: map  # Changed to map
     Frame Rate: 30
   Name: root
   Tools:
@@ -197,8 +153,6 @@ Visualization Manager:
     - Class: rviz_default_plugins/FocusCamera
     - Class: rviz_default_plugins/Measure
       Line color: 128; 128; 0
-    - Class: rviz_default_plugins/SetInitialPose
-      Topic: /initialpose
     - Class: rviz_default_plugins/SetGoal
       Action: /navigate_to_pose
       Topic: /goal_pose
@@ -211,7 +165,7 @@ Visualization Manager:
       Class: rviz_default_plugins/Orbit
       Distance: 31.869173049926758
       Enable Stereo Rendering:
-        Stereo Eye Separation: 0.05999999865889549
+        Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
@@ -220,10 +174,10 @@ Visualization Manager:
         Y: -1.3398375511169434
         Z: 0.12751728296279907
       Focal Shape Fixed Size: true
-      Focal Shape Size: 0.05000000074505806
+      Focal Shape Size: 0.05
       Invert Z Axis: false
       Name: Current View
-      Near Clip Distance: 0.009999999776482582
+      Near Clip Distance: 0.01
       Pitch: 0.7853981852531433
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
