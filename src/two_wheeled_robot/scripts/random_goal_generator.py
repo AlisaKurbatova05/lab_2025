@@ -20,26 +20,26 @@ class RandomGoalGenerator(Node):
         self.map_resolution = 0.0
         self.map_origin = None
         self.free_cells = []
-        self.goal_active = False  # Track if a goal is being executed
+        self.goal_active = False  # Отслеживание статуса достижения цели
         self.get_logger().info('Waiting for map data...')
 
     def map_callback(self, msg):
         if self.map_data is not None:
-            return  # Process map only once
+            return  # Обработка карты единожды
         self.map_data = np.array(msg.data, dtype=np.int8).reshape(msg.info.height, msg.info.width)
         self.map_width = msg.info.width
         self.map_height = msg.info.height
         self.map_resolution = msg.info.resolution
         self.map_origin = msg.info.origin
-        # Identify free cells (value 0)
+        # Определение свободных клеток
         self.free_cells = [(y, x) for y in range(self.map_height) for x in range(self.map_width) if self.map_data[y, x] == 0]
         self.get_logger().info(f'Found {len(self.free_cells)} free cells in map')
-        # Start first goal if not already active
+        # Дать новую цель при условии выполнения предыдущей
         if not self.goal_active:
             self.send_random_goal()
 
     def grid_to_world(self, grid_x, grid_y):
-        # Convert grid coordinates to world coordinates
+        # Конвертирование ячеек карты в координаты
         world_x = self.map_origin.position.x + (grid_x + 0.5) * self.map_resolution
         world_y = self.map_origin.position.y + (grid_y + 0.5) * self.map_resolution
         return world_x, world_y
@@ -53,10 +53,10 @@ class RandomGoalGenerator(Node):
             self.get_logger().info('Waiting for previous goal to complete')
             return
 
-        # Select random free cell
+        # Выбор случайной цели
         grid_y, grid_x = random.choice(self.free_cells)
         world_x, world_y = self.grid_to_world(grid_x, grid_y)
-        # Random yaw between -pi and pi
+        # Случайный угол поворота
         yaw = random.uniform(-math.pi, math.pi)
 
         goal_msg = NavigateToPose.Goal()
@@ -74,7 +74,7 @@ class RandomGoalGenerator(Node):
         goal_msg.pose = goal_pose
 
         self.get_logger().info(f'Sending goal: x={world_x:.2f}, y={world_y:.2f}, yaw={yaw:.2f}')
-        self.goal_active = True  # Mark goal as active
+        self.goal_active = True  # Пометка активной цели
         self._send_goal_future = self._action_client.send_goal_async(goal_msg)
         self._send_goal_future.add_done_callback(self.goal_response_callback)
 
@@ -83,7 +83,7 @@ class RandomGoalGenerator(Node):
         if not goal_handle.accepted:
             self.get_logger().info('Goal rejected')
             self.goal_active = False
-            self.send_random_goal()  # Try next goal
+            self.send_random_goal()  # Новая цель
             return
         self.get_logger().info('Goal accepted')
         self._get_result_future = goal_handle.get_result_async()
@@ -92,16 +92,16 @@ class RandomGoalGenerator(Node):
     def get_result_callback(self, future):
         result = future.result()
         status = result.status
-        if status == 4:  # Succeeded
+        if status == 4:  # Успех
             self.get_logger().info('Goal succeeded')
-        elif status == 6:  # Aborted
+        elif status == 6:  # Неудача
             self.get_logger().info('Goal aborted')
-        elif status == 5:  # Canceled
+        elif status == 5:  # Отказ от выполнения
             self.get_logger().info('Goal canceled')
         else:
             self.get_logger().info(f'Goal finished with status {status}')
-        self.goal_active = False  # Reset goal status
-        self.send_random_goal()  # Send next goal
+        self.goal_active = False  # Сброс статуса текущей задачи
+        self.send_random_goal()  # Задание новой цели
 
     def quaternion_from_euler(self, roll, pitch, yaw):
         qx = math.sin(roll/2) * math.cos(pitch/2) * math.cos(yaw/2) - math.cos(roll/2) * math.sin(pitch/2) * math.sin(yaw/2)
