@@ -9,6 +9,8 @@ Panels:
         - /TF1
       Splitter Ratio: 0.5
     Tree Height: 611
+  # - Class: rviz_common/ToolProperties
+  #   Name: Tool Properties
 Visualization Manager:
   Class: ""
   Displays:
@@ -29,6 +31,45 @@ Visualization Manager:
       Plane: XY
       Plane Cell Count: 10
       Reference Frame: <Fixed Frame>
+      Value: true
+    - Alpha: 1
+      Class: rviz_default_plugins/Map
+      Color Scheme: costmap
+      Enabled: false
+      Name: Map
+      Topic: /map
+      Value: true
+    - Alpha: 1
+      Class: rviz_default_plugins/Map
+      Color Scheme: costmap
+      Enabled: true
+      Name: Global costmap
+      Topic: /global_costmap/costmap
+      Value: true
+    - Alpha: 1
+      Class: rviz_default_plugins/Map
+      Color Scheme: costmap
+      Enabled: false
+      Name: Local costmap
+      Topic: /local_costmap/costmap
+      Value: true
+    - Alpha: 1
+      Class: rviz_default_plugins/Marker
+      Enabled: false
+      Name: Voxel layer
+      Topic: /my_marker
+      Value: true
+    - Class: rviz_default_plugins/Image
+      Name: Video with predict
+      Enabled: True
+      Topic: /video_with_predict
+      Value: True
+    - Class: rviz_default_plugins/Path
+      Enabled: true
+      Name: Plan
+      Topic: /plan
+      Color: 0; 255; 0
+      Line Width: 0.03
       Value: true
     - Alpha: 0.6000000238418579
       Class: rviz_default_plugins/RobotModel
@@ -133,7 +174,7 @@ Visualization Manager:
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
-    Fixed Frame: odom
+    Fixed Frame: map
     Frame Rate: 30
   Name: root
   Tools:
@@ -144,6 +185,11 @@ Visualization Manager:
     - Class: rviz_default_plugins/FocusCamera
     - Class: rviz_default_plugins/Measure
       Line color: 128; 128; 0
+    - Class: rviz_default_plugins/SetInitialPose
+      Topic: /initialpose
+    - Class: rviz_default_plugins/SetGoal
+      Action: /navigate_to_pose
+      Topic: /goal_pose
   Transformation:
     Current:
       Class: rviz_default_plugins/TF

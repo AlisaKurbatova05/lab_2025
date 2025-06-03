@@ -2,7 +2,6 @@ FROM base_docker_lab2
 
 # Копирование проекта
 WORKDIR /workspace/lab_2025
-COPY ../src /workspace/lab_2025/src
 COPY ../runlaunch.sh /workspace/lab_2025
 
 # Делаем скрипт исполняемым
@@ -14,9 +13,8 @@ RUN /bin/bash -c '. /opt/ros/humble/setup.bash; colcon build'
 # Добавляем необходимые source-строки в .bashrc
 RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc && \
     echo "source /usr/share/gazebo/setup.sh" >> ~/.bashrc && \
-    echo "source ~/lab_2025/install/setup.bash" >> ~/.bashrc
+    echo "source /workspace/lab_2025/install/setup.bash" >> ~/.bashrc
 
 WORKDIR /workspace/lab_2025
 
-ENTRYPOINT [ "/bin/bash","./runlaunch.sh" ]
-#ENTRYPOINT [ "/bin/bash"]
+ENTRYPOINT [ "/bin/bash" ]

@@ -17,7 +17,7 @@ class MyNodes(Node):
         
         # Загружаем модель YOLOv11
         self.model = YOLO(weights_path)
-        self.model.model.to('cpu')
+        self.model.model.to('cuda')
         
         # Создаем паблишер для публикации изображений с предиктами
         self.publisher_ = self.create_publisher(Image, 'video_with_predict', 30)

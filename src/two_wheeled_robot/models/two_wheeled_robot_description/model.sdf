@@ -157,7 +157,7 @@
       </material>
     </visual>
 
-    <sensor name="lidar" type="ray">
+    <sensor name="lidar" type="gpu_ray">
       <pose>0.215 0 0.1 0 0 0</pose>
       <always_on>true</always_on>
       <visualize>true</visualize>

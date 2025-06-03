@@ -30,6 +30,8 @@ def generate_launch_description():
   use_robot_state_pub = LaunchConfiguration('use_robot_state_pub')
   use_rviz = LaunchConfiguration('use_rviz')
   use_sim_time = LaunchConfiguration('use_sim_time')
+  map_path = os.path.join(pkg_share, 'maps', 'lab2_map.yaml')
+  nav2_params = os.path.join(pkg_share, 'config', 'nav2_config.yaml.yaml')
 
   # Declare the launch arguments  
   declare_urdf_model_path_cmd = DeclareLaunchArgument(
@@ -96,6 +98,22 @@ def generate_launch_description():
     output='screen',
     arguments=['-d', rviz_config_file])
   
+  # Launch nav2_map_server
+  start_nav2_map_server = Node(
+      package='nav2_bringup',
+      executable='bringup_launch.py',
+      parameters=[nav2_params],
+      output='screen'
+  )
+  
+  # Launch nav2_bringup
+  start_nav2_bringup = Node(
+      package='nav2_map_server',
+      executable='map_server',
+      parameters=[{'yaml_filename': map_path}, {'use_sim_time': True}],
+      output='screen'
+  )
+  
   # Create the launch description and populate
   ld = LaunchDescription()
 
@@ -112,5 +130,8 @@ def generate_launch_description():
   ld.add_action(start_joint_state_publisher_gui_node)
   ld.add_action(start_robot_state_publisher_cmd)
   ld.add_action(start_rviz_cmd)
+
+  # ld.add_action(start_nav2_map_server)
+  # ld.add_action(start_nav2_bringup)
 
   return ld
