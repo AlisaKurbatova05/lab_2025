@@ -45,7 +45,6 @@ class MyNodes(Node):
             return None, None
         
         current_image = self.cv_image.copy()
-
         results = self.model.predict(
             current_image,
             conf=0.5,
@@ -58,23 +57,39 @@ class MyNodes(Node):
             return current_image, None
 
         boxes = results[0].boxes
-        classes = boxes.cls.cpu().numpy()  # классы обнаруженных объектов
+        classes = boxes.cls.cpu().numpy()
         xyxy = boxes.xyxy.cpu().numpy()
 
-        # Фильтруем только людей (class == 0)
+        # Ищем только людей (class == 0)
         person_indices = [i for i, c in enumerate(classes) if int(c) == 0]
-
         if len(person_indices) == 0:
             return current_image, None
 
-        # Выбираем первую найденную персону
-        i = person_indices[0]
-        x1, y1, x2, y2 = xyxy[i]
-        cx = int((x1 + x2) / 2)
-        cy = int((y1 + y2) / 2)
+        img_h, img_w, _ = current_image.shape
+        center_x_frame = img_w / 2
+        center_y_frame = img_h / 2
 
-        frame_with_predict = results[0].plot()
-        return frame_with_predict, (cx, cy)
+        # Выбираем ближайшего к центру кадра
+        best_i = None
+        best_distance = float('inf')
+        best_cx, best_cy = None, None
+
+        for i in person_indices:
+            x1, y1, x2, y2 = xyxy[i]
+            cx = (x1 + x2) / 2
+            cy = (y1 + y2) / 2
+            dist = ((cx - center_x_frame) ** 2 + (cy - center_y_frame) ** 2) ** 0.5
+            if dist < best_distance:
+                best_distance = dist
+                best_i = i
+                best_cx, best_cy = int(cx), int(cy)
+
+        if best_i is not None:
+            frame_with_predict = results[0].plot()
+            return frame_with_predict, (best_cx, best_cy)
+        else:
+            return current_image, None
+
 
 
     def timer_callback(self):
